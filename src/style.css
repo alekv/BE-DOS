@@ -1,0 +1,143 @@
+:root
+{
+	/* Metrics for Consolas */
+	/* Each font has it's own metrics. 'lw' is one letter width and 'lh' is one letter height. A font will look okay without it's specific metrics, but a bit off. */
+	/*
+	font-family: consolas,monospace;
+	--lw: 0.55em;
+	--lh: 1.17em;
+	*/
+	
+	font-family: "Fira Code Regular Embeded","Fira Code",Consolas,monospace;
+	--lw: 0.6em;
+	--lh: 1.312em;
+
+	--primary: #E2E2E2; /* text color */
+	--secondary: #363636; /* background color */
+	--gradient: #363636;
+	--emphasis: #FCFCFC;
+
+	font-size: 17px;
+}
+
+@font-face
+{
+	font-family: "Fira Code Regular Embeded";
+	src: url('fira-code-regular.ttf') format('truetype');
+}
+
+body
+{
+	color: black;
+	background: white;
+	max-width: 50rem;
+	margin: 1rem auto auto auto;
+}
+
+em, strong
+{
+	font-style: normal;
+	font-weight: normal;
+	color: white;
+	background: #5E5E5E;
+}
+
+/* I want to change only #terminal::selection but Firefox and Chrome do not let me do that. I can do it for #buffer but #cmd doesn't respond. So I change the colors for the whole page. Since the page outside the terminal is black text on white background I compensate with body::selection. */
+::selection
+{
+	background: var(--primary);
+	color: var(--secondary);
+}
+
+body::selection
+{
+	background: black;
+	color: white;
+}
+
+/* It's outside #terminal. Gives information to the user. */
+#info
+{
+	font-family: sans-serif;
+	line-height: 1.4rem;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
+#terminal
+{
+	/* This makes the #buffer to shrink when #cmd grows. #cmd is allowed to grow up to 2 lines and does because it can span into multiple .line's, when the user entry is very long. All other solutions I tried either overlapped #cmd on #buffer or pushed #buffer upwards which made the first line not visible when scrolling up with PGUP. */
+	display: grid;
+	grid-template-rows: min-content fit-content(calc(2 * var(--lh)));
+
+	overflow: hidden;
+	overflow-wrap: break-word;
+
+	/* These can get overridden by the terminal_width and terminal_height variables in JavaScript. */
+	width: calc(80 * var(--lw));
+	height: calc(25 * var(--lh));
+	
+	border: 0.5em solid gray;
+
+	padding: 0.5rem;
+	line-height: normal; /* todo: is this necessary? */
+	margin: auto;
+	
+	background: var(--secondary);
+	color: var(--primary);
+	background: linear-gradient(0deg, var(--gradient) 0%, var(--secondary) 100%);
+	background-attachment: fixed;
+}
+
+#buffer
+{
+	max-height: calc(24 * var(--lh));
+	
+	/* Causes a minor artifact when scrolling. */
+	overflow: hidden; 
+}
+
+/* #cmd has no styles right now. */
+#cmd
+{
+}
+
+/* I initially used white-space:pre-wrap on #cmd and #buffer but it collapses white space when it encounters the end of the div, on the right end. So I slice the content inside #cmd and #buffer into lines, and enclose them using this class. Since the div.line doesn't get large enough to have text fold, 'pre' is more suitable. */
+.line
+{
+	white-space: pre;
+}
+
+/* I need .line's to take up space so that I can put some empty lines. Setting a height in .line will cause an artifact when buffer gets scrolled. The alternative is this. 'content' should be a space. Other characters cause .line's collapse in Chrome and making dots invisible in Firefox. From: https://stackoverflow.com/questions/3416454 */
+.line:after
+{
+    content: ' ';
+    visibility: hidden;
+}
+
+#cursor
+{
+	/* This will make te cursor a block. */
+	/*
+	background: var(--primary);
+	color: var(--secondary);
+	*/
+
+	/* This will make the cursor an underscore. Some line height is needed, which we do on body. This also requires a bit more of height in #terminal. */
+	/*
+	background: var(--secondary);
+	color: var(--primary);
+	background: linear-gradient(to top, transparent 0em, var(--primary) 0em, var(--primary) 0.17em, transparent 0.17em, transparent 100%);
+	*/
+	
+	/* By activating this, the block-type cursor will blink. */
+	/* animation: blink 0.25s step-end infinite alternate; */ /* as in MS-DOS */
+	/* animation: blink 0.55s step-end infinite alternate; */ /* as in Win7 */
+	/* animation: blink 0.32s step-end infinite alternate; */ /* as in Matrix1 ending */
+
+}
+
+/* Until I enable JavaScript to change the styling. */
+/* Used in the blinking of underscore and block cursor. A slightly modified version of: http://jsfiddle.net/onigetoc/aLk7v */
+@keyframes blink { 50% { background: transparent; color: var(--primary); }  }
+
