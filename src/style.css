@@ -20,6 +20,12 @@
 	font-size: 17px;
 }
 
+*
+{
+	/* Necessary because Fira Code has ligatures. */
+	font-variant-ligatures: none;
+}
+
 @font-face
 {
 	font-family: "Fira Code Regular Embeded";
