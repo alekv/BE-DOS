@@ -63,9 +63,7 @@ Takes a string and slices it into lines equal to terminal_width, or, optionally,
 
 function wrap_text(input, wrap_width=terminal_width)
 {
-	var i, slice, prev_char, cur_char, next_char, reverse=[], break_pos, printed, remaining, lines=[], did_break, pack=[];
-	
-	
+	var i, slice, prev_char, cur_char, next_char, reverse=[], break_pos, printed, remaining, lines=[], did_break, pack=[];	
 	
 	/*
 	* The principle:
@@ -105,7 +103,7 @@ function wrap_text(input, wrap_width=terminal_width)
 			{
 				break_pos =  wrap_width - 1;
 			}
-			else if (cur_char == " ")
+			else if (cur_char == " " || cur_char == "") // empty string means we reached the end of the line
 			{
 				break_pos = wrap_width;
 			}
@@ -127,7 +125,7 @@ function wrap_text(input, wrap_width=terminal_width)
 				else
 					break_pos = wrap_width;
 			}
-			
+
 			lines.push(remaining.slice(0, break_pos)); // the cut line
 			remaining = remaining.slice(break_pos, remaining.length);
 		}
