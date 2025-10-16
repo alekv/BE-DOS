@@ -498,7 +498,6 @@ function command_easter(params)
 			egg = params[i].toLowerCase();
 		
 			if (egg == "doom")                        print_to_buffer(easter_doom);
-			else if (egg == "girl")                   print_to_buffer(easter_girl);
 			else if (egg == "bofh")                   print_to_buffer(easter_bofh, false);
 			else if (egg == "cake" || egg == "cake1") print_to_buffer(easter_cake1);
 			else if (egg == "cake2")                  print_to_buffer(easter_cake2);
